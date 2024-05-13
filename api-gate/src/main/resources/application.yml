@@ -1,0 +1,29 @@
+server:
+  port: 8901
+spring:
+  application:
+    name: apigate
+  data:
+    mongodb:
+      host: host.docker.internal
+      port: 27017
+      database: puni_db
+  cloud:
+    gateway:
+      mvc:
+        routes-map:
+          - id: userservice
+            uri: lb://userservice
+            predicates:
+              - Path=/auth/**
+
+          - id: journalservice
+            uri: lb://journalservice
+            predicates:
+              - Path=/journal/**
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://host.docker.internal:8761/eureka/
